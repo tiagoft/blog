@@ -4,5 +4,6 @@
 format: jb-book
 root: intro
 chapters:
+- file: hypotesis_testing
 - file: pvalues
 - file: abtest
