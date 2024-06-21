@@ -1,0 +1,946 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>What do t-tests and their p-values mean? &#8212; Tiago&#39;s Blog</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pvalues';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test" href="abtest.html" />
+    <link rel="prev" title="Welcome to my blog!" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Tiago's Blog - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Tiago's Blog - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to my blog!
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">What do t-tests and their p-values mean?</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="abtest.html">P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fpvalues.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/pvalues.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>What do t-tests and their p-values mean?</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">What do t-tests and their p-values mean?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#central-limit-theorem-t-test-s-older-sibling">Central Limit Theorem: T-Test’s older sibling</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis">Using the Central Limt Theorem to reject a null hypothesis</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-standard-normal">Using a standard normal</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#null-hypothesis-and-the-p-value">Null Hypothesis and the p-value</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-a-pitfall-when-there-are-too-many-observations">P-value: a pitfall when there are too many observations</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-t-student-distribution">The T-student distribution</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-student-distribution">P-values using the T-Student distribution</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-one-sample-t-test">The one-sample t-test</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-statistic">P-Values using the T-Statistic</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">The Alternative Hypothesis (and refinements to the Null Hypothesis)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-sample-t-test">The two-sample t-test</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="what-do-t-tests-and-their-p-values-mean">
+<h1>What do t-tests and their p-values mean?<a class="headerlink" href="#what-do-t-tests-and-their-p-values-mean" title="Link to this heading">#</a></h1>
+<p>One of the hardest, yet most important parts of math and science is statistics. And one of the most used (and mis-interpreted) parts of statistics is the t-test, which is often used to generate our well-known p-value. I have seen many different definitions for the p-value depending on the literature, like:</p>
+<ul class="simple">
+<li><p>The probability of rejecting the null hypothesys given that the null is true,</p></li>
+<li><p>The probability of observing an effect as extreme as the observed one given that initial assumptions are true,</p></li>
+</ul>
+<p>and some variations of that. However, the underlying processes of t-tests and p-values are seldom understood.</p>
+<p>In this post, I want to share my thoughts on <strong>what do t-tests and their corresponding p-values really mean</strong>, so that we can stop misinterpreting p-values or unintentionally doing p-value hacking.</p>
+<p>It took me around two decades of academic life to come to terms with what that definition should be. It took me so long for many reasons: the mathematics behind the t-test are far from trivial, software packages nowadays are very easy to use, and p-values are simply widely accepted as basis for statements like “results were significantly improved from the baseline”. I would be so happy if it didn’t take you that long to realize some things that are more scary (because maths…) than actually complicated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="central-limit-theorem-t-test-s-older-sibling">
+<h1>Central Limit Theorem: T-Test’s older sibling<a class="headerlink" href="#central-limit-theorem-t-test-s-older-sibling" title="Link to this heading">#</a></h1>
+<p>Our story here begin with the Central Limit Theorem (CLT). The scenario underlying the CLT is that we have samples of size <span class="math notranslate nohighlight">\(n\)</span> which are drawn from an unknown distribution, and we want to understand more about the distribution. The CLT specifically refers to the relationship between <span class="math notranslate nohighlight">\(\mu\)</span>, which is the population mean for the distribution, and <span class="math notranslate nohighlight">\(\bar{X}\)</span>, which is the sample mean (which we measure!).</p>
+<p>The CLT assumes that samples <span class="math notranslate nohighlight">\(X\)</span> were drawn from a distribution with mean <span class="math notranslate nohighlight">\(\mu\)</span> and variance <span class="math notranslate nohighlight">\(\sigma ^2\)</span> (if you prefer: standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span>). The original distribution that generated samples <span class="math notranslate nohighlight">\(X\)</span> does not have to be normal or of any other specific shape. If our sample has <span class="math notranslate nohighlight">\(n\)</span> elements, then we can calculate the sample mean <span class="math notranslate nohighlight">\(\bar{X}\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[
+\bar{X} = \frac{\sum_{j=1}^n X_j}{n}
+\]</div>
+<p>We can expect the sample mean <span class="math notranslate nohighlight">\(\bar{X}\)</span> to be close to the population mean <span class="math notranslate nohighlight">\(\mu\)</span> (remember: <span class="math notranslate nohighlight">\(\mu\)</span> comes from the distribution!). The CLT can help us understand how close these two quantities are! According to the CLT, <span class="math notranslate nohighlight">\(\bar{X}\)</span> behaves as it were drawn from a normal distribution with mean <span class="math notranslate nohighlight">\(\mu\)</span> and variance <span class="math notranslate nohighlight">\(\frac{\sigma ^2}{n}\)</span>, or:</p>
+<div class="math notranslate nohighlight">
+\[
+\bar{X} \sim N(\mu, \sigma^2/n)
+\]</div>
+<p>This equation means that samples with higher <span class="math notranslate nohighlight">\(n\)</span> are likely to have a sample mean closer to the population mean.</p>
+<p>But, how can we use this result?</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="using-the-central-limt-theorem-to-reject-a-null-hypothesis">
+<h1>Using the Central Limt Theorem to reject a null hypothesis<a class="headerlink" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis" title="Link to this heading">#</a></h1>
+<p>Let’s suppose that a bakery says their cupcakes weight, on average, 100g, with a standard deviation of 10g. This standard deviation accounts for the fact that cupcakes are made by hand. However, even handmade cupcakes have to follow food regulations rules, so we are hired to check if the cupcakes are following that specification. What do we do? We randomly select some cupcakes, creating a <em>sample</em>. Suppose we are running our test with <span class="math notranslate nohighlight">\(n=10\)</span> cupcakes.</p>
+<p>After some time in the laboratory, we find that our sample mean is 105g, which is within one standard deviation from the expected mean.</p>
+<p>Now we ask ourselves: what are the chances that, if the specifications are followed, we observe a sample mean that is at least as high as the one we observed?</p>
+<p>Because we know, from the CLT, that <span class="math notranslate nohighlight">\(\bar{X} \sim N(\mu, \sigma^2/n)\)</span>, we can calculate this probability using the cumulative distribution function of a normal, as in:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">xbar</span> <span class="o">=</span> <span class="mi">105</span>
+<span class="n">sigma_xbar</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_xbar</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0126736593387341
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we have something to interpret:</p>
+<ul class="simple">
+<li><p>We observed <span class="math notranslate nohighlight">\(\bar{X}\)</span>.</p></li>
+<li><p>Bakery says their cupcakes’ weights follow a specific distribution</p></li>
+<li><p>If what the bakery says is true, the probability of observing that specific <span class="math notranslate nohighlight">\(\bar{X}\)</span> is around <span class="math notranslate nohighlight">\(\times 10^-2\)</span></p></li>
+</ul>
+<p>Something is odd here.</p>
+<p>Either we screwed up the measurements, or the bakery is wrong about their cupcakes’ weight distribution.</p>
+<p>Because I am very skilled in weighting cupcakes, I will go with the latter: the weights likely do not have mean 100g and standard deviation 10g.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="using-a-standard-normal">
+<h1>Using a standard normal<a class="headerlink" href="#using-a-standard-normal" title="Link to this heading">#</a></h1>
+<p>We don’t need to use a scale and translated version of the Normal distribution to calculate its values. Instead, we can scale and translate our measurements and then use a distribution <span class="math notranslate nohighlight">\(N(0,1)\)</span> as a model. For such, we will need to calculate the standardized variable <span class="math notranslate nohighlight">\(Z\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[
+Z = \frac{ \bar{X}-\mu}{\sigma / \sqrt{N}}
+\]</div>
+<p>Our code would now look like:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">xbar</span> <span class="o">=</span> <span class="mi">105</span>
+<span class="n">sigma_xbar</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="p">(</span><span class="n">xbar</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">/</span><span class="n">sigma_xbar</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">p_</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_xbar</span><span class="p">)</span> <span class="c1"># Reference so everyone can see we are not crazy</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">p_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.23606797749979 0.0126736593387341 0.0126736593387341
+</pre></div>
+</div>
+</div>
+</div>
+<p>We have exactly the same results (which means math still works). But why should we do this? It feels much easier to use the <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> parameters!</p>
+<p>It is fair to say that it is more intuitive to use Python’s automatic shift and scale, because they keep us using real-world measurements: <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\bar{X}\)</span> still represent “cupcake weight”, that is, we can immediately interpret that.</p>
+<p>However, the standardized variable <span class="math notranslate nohighlight">\(Z\)</span> shows us information in a scale of deviations: a difference of <span class="math notranslate nohighlight">\(1\)</span> in <span class="math notranslate nohighlight">\(Z\)</span> means one standard deviation. This allows us to immediately evaluate if samples are too far away from expected values. In our cupcake case, this could have little added utility, but in multivariate cases it allows us to visualize which variables have a higher deviation from the mean.</p>
+<p>In summary, the standardization leads to a closer dialogue with statistics theory, at the expense of losing the variable’s original meaning. The standardization equation builds a bridge between these two worlds, and for this reason it is important to understand it.</p>
+<p>In fact, Scipy uses the standardization in the “backend”, using the <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> parameters provided by the user (that is, it shifts and scales the variables and then calculate statistics using the standard distributions).</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="null-hypothesis-and-the-p-value">
+<h1>Null Hypothesis and the p-value<a class="headerlink" href="#null-hypothesis-and-the-p-value" title="Link to this heading">#</a></h1>
+<p>What happened here is that we had an initial hypothesis (the weights follow that specific distribution) and we gathered data that allowed us to state: if that is true, then there is a very small probability of observing our data. Consequently, we should reject - or nullify - this initial hypothesis. This is why this initial hypothesis is called <em>null hypothesis</em>.</p>
+<p>Also, we have a probability of observing data at least as far from the initial hypothesis (or: at least as extreme) as the observed data. If this probability is very small, then we reject the null hypothesis. This is our <span class="math notranslate nohighlight">\(1 \times 10^-2\)</span> probability calculated above. Because we don’t want to say “the probability of observing data as extreme or more extreme than the data we actually observed” every time, we are going to call this a <em>p-value</em>.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="p-value-a-pitfall-when-there-are-too-many-observations">
+<h1>P-value: a pitfall when there are too many observations<a class="headerlink" href="#p-value-a-pitfall-when-there-are-too-many-observations" title="Link to this heading">#</a></h1>
+<p>Now, let’s take a look at what happens when we change the number of observations:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">n_</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">xbar</span> <span class="o">=</span> <span class="mi">105</span>
+<span class="n">p_</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">n_</span><span class="p">:</span>
+    <span class="n">sigma_xbar</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_xbar</span><span class="p">)</span>
+    <span class="n">p_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n_</span><span class="p">,</span> <span class="n">p_</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of observations&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;p-value decreases when $n$ increases&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/12afd10b8a81102c16382c10b8ae9c899f21482aa8409cbb803ba1a46d362e12.png" src="_images/12afd10b8a81102c16382c10b8ae9c899f21482aa8409cbb803ba1a46d362e12.png" />
+</div>
+</div>
+<p>Try to change values for <code class="docutils literal notranslate"><span class="pre">sigma</span></code> and <code class="docutils literal notranslate"><span class="pre">xbar</span></code>, and see that we find the same behavior.</p>
+<p>When we have more observations in our sample, the p-value decreases. This is because the variance of the distribution of our sample mean is inversely proportional to the number of observations. Under this light, let’s review our cupcake experiment.</p>
+<p>We originally said: <em>because our p-value is very small, we reject the hypothesis that the cupcake weights follow some distribution with mean 100g and standard deviation 10g.</em></p>
+<p>The problem here is that we could have chosen any number of cupcakes to build our sample. And, as we observed above, with a large enough <span class="math notranslate nohighlight">\(n\)</span>, we can get a very small p-value regardless of the actual difference between the claimed population mean <span class="math notranslate nohighlight">\(\mu\)</span> and the observed sample mean <span class="math notranslate nohighlight">\(\bar{X}\)</span>.</p>
+<p>Actually, we could find a value of <span class="math notranslate nohighlight">\(n\)</span> that allows us to get a p-value of <span class="math notranslate nohighlight">\(0.01\)</span> even if our sample mean was just a negligible 0.1g above our claimed mean of 100g:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">xbar</span> <span class="o">=</span> <span class="mf">100.1</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># initial value</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># initial value</span>
+<span class="k">while</span> <span class="n">p</span> <span class="o">&gt;</span> <span class="mf">0.01</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">sigma_xbar</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_xbar</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>54119 0.009999968099338896
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is especially relevant when you are dealing with larger samples and big data, because samples can quickly reach this size. If the p-values are used naively, null hypotheses will be rejected and “outperforming the previous approach” will be claimed too often with a negligible effect. So, we might want to consider effect sizes as a further analysis. There is a whole theory on effect sizes, and I will probably get back to that in a future post, but if your field does not use any analysis of this sort then using the difference between the theoretical and the measured means (or: <span class="math notranslate nohighlight">\(|| \mu - \bar{X} ||\)</span>) might suffice.</p>
+<p>For now, we will focus on a different case: when the population variance is unknown.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-t-student-distribution">
+<h1>The T-student distribution<a class="headerlink" href="#the-t-student-distribution" title="Link to this heading">#</a></h1>
+<p>The CLT, which is the base for all our deduction here, can only be used if we know the true population variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>. This is usually not the case, as it is hard to find some situation is which we don’t known the mean, but we know the variance of our population. If we don’t know <span class="math notranslate nohighlight">\(\sigma^2\)</span>, we can estimate the sample variance <span class="math notranslate nohighlight">\(S^2\)</span> and use it instead to standardize our input:</p>
+<div class="math notranslate nohighlight">
+\[
+T = \frac{ \bar{X}-\mu}{S / \sqrt{N}}
+\]</div>
+<p>Although <span class="math notranslate nohighlight">\(\bar{X}\)</span>, due to the CLT, follows a normal distribution, the sample variance <span class="math notranslate nohighlight">\(S^2\)</span> is also a random variable. For this reason, <span class="math notranslate nohighlight">\(T\)</span> does not follow a normal distribution. Instead, it follows a T-student distribution, which accounts for the uncertainty in <span class="math notranslate nohighlight">\(S\)</span> by having longer tails.</p>
+<p>The T-student distribution is similar to the normal regarding its simmetry, but is has greater values in the long tails. The T-student distribution depends on a parameter called <em>degrees of freedom</em> that corresponds, in our case, to the total number of samples minus the number of sample mean estimates in our experiment. For the cupcake scenario discussed above, we have one sample mean estimate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Normal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;T-student, df=3&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;T-student, df=10&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/03ac2efe7a1173e0dcb06ea0f033ef1fed108dc23ccd80c8a434645beb6f74ac.png" src="_images/03ac2efe7a1173e0dcb06ea0f033ef1fed108dc23ccd80c8a434645beb6f74ac.png" />
+</div>
+</div>
+<p>As we can see, the T-student distribution has longer tails than the normal, which account for its uncertainty. Also, when we increase the number of degrees of freedom, the T-Student distribution slowly converges to the normal.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="p-values-using-the-t-student-distribution">
+<h1>P-values using the T-Student distribution<a class="headerlink" href="#p-values-using-the-t-student-distribution" title="Link to this heading">#</a></h1>
+<p>Henceforth, if we didn’t know <span class="math notranslate nohighlight">\(\sigma^2\)</span> beforehand, we would calculate our p-value as:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">sample_cupcakes</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">sigma_est</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sample_cupcakes</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">xbar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sample_cupcakes</span><span class="p">)</span>
+
+<span class="n">sigma_xbar</span> <span class="o">=</span> <span class="n">sigma_est</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_xbar</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.08125674987566645
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that now we don’t use the “true” sigma in our calculations. Rather, even if we used it to generate samples, we used the sample standard deviation to proceed to our calculations.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-one-sample-t-test">
+<h1>The one-sample t-test<a class="headerlink" href="#the-one-sample-t-test" title="Link to this heading">#</a></h1>
+<p>What we just did is a one-sample t-test. We estimated our p-value using the cumulative distribution function of the t distribution, instead of the normal. This change was because the uncertainty in our sample variance estimator makes it necessary to use a t-student distribution.</p>
+<p>Of course, because the one-sample t-test is performed many, many times, it comes bundled as part of our <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code> package:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">ttest_1samp</span><span class="p">(</span><span class="n">sample_cupcakes</span><span class="p">,</span> <span class="n">popmean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;greater&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TtestResult(statistic=np.float64(1.4530992590921659), pvalue=np.float64(0.08125674987566646), df=np.int64(19))
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can already see that the p-value matches our estimation above, but what do each of these other parameters mean?</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="p-values-using-the-t-statistic">
+<h1>P-Values using the T-Statistic<a class="headerlink" href="#p-values-using-the-t-statistic" title="Link to this heading">#</a></h1>
+<p>The Student-T distribution is mathematically as centered in zero, similarly to the standard normal distribution. Although the scipy implementation kindly allows us to shift and scale our inputs in the backend, using de <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> parameters, this could lead to the false impression that <span class="math notranslate nohighlight">\(\bar{X}\)</span> follows a T distribution. It does not!!! Rather, the T statistic (that is, the standardization of <span class="math notranslate nohighlight">\(\bar{X} using the sample variance \)</span>S^2$) is the one that follows the T distribution.</p>
+<p>We can avoid this confusion by standardizing our samples ourselves to obtain the same results as above:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># What we did so far: use python&#39;s loc and scale parameters to</span>
+<span class="c1"># implicitly standardize our input</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_xbar</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># What is usually done: explicitly standardize our input</span>
+<span class="n">t_statistic</span> <span class="o">=</span> <span class="p">(</span><span class="n">xbar</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_xbar</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">t_statistic</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">t_statistic</span><span class="p">,</span> <span class="n">p2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.08125674987566645 1.4530992590921659 0.08125674987566645
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">
+<h1>The Alternative Hypothesis (and refinements to the Null Hypothesis)<a class="headerlink" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis" title="Link to this heading">#</a></h1>
+<p>In our function call, we had the parameter: <code class="docutils literal notranslate"><span class="pre">alternative='greater'</span></code>. The alternative hypothesis is the negation, or the complement, of the null hypothesis. In our cupcake scenario, we simply assumed that we wanted to calculate the probability that our sample mean is at least as high as the one we got.</p>
+<p>However, it could be the case that we wanted the probability that the sample mean is at least as far from the population mean as we have. In this case, we would need to “reflect” <span class="math notranslate nohighlight">\(\bar{x}\)</span> around <span class="math notranslate nohighlight">\(\mu\)</span> and then calculate the area in both “tails”. This is called a two-tailed test, and, because of the symmetry in the t-distribution, it gives a value twice as large as the one-tailed test:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_xbar</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">ttest_1samp</span><span class="p">(</span><span class="n">sample_cupcakes</span><span class="p">,</span> <span class="n">popmean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;two-sided&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.1625134997513329
+TtestResult(statistic=np.float64(1.4530992590921659), pvalue=np.float64(0.16251349975133292), df=np.int64(19))
+</pre></div>
+</div>
+</div>
+</div>
+<p>All right.</p>
+<p>So far, we have a test for when we know the mean and variance of the population. We also have the t-test for when we know the mean, but not the variance of the population. But, in real life, we often simply have two groups - say, group A and group B - being measured, and we have no hypothesys on their means or variances. This gives rise to…</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-two-sample-t-test">
+<h1>The two-sample t-test<a class="headerlink" href="#the-two-sample-t-test" title="Link to this heading">#</a></h1>
+<p>Although we could leave the cupcakes behind, this would make me so sad. In this example, we are going to use two bakeries (A and B), and all we have are some cupcake samples from each one of them. Can we safely say that their cupcakes’ weights, on average, are not the same?</p>
+<p>For this, let’s start by generating some samples for each bakery, and calculate sample statistics for each one:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nA</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">nB</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">samplesA</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nA</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">samplesB</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nB</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">xbarA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">samplesA</span><span class="p">)</span>
+<span class="n">xbarB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">samplesB</span><span class="p">)</span>
+<span class="n">sigmaA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samplesA</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nA</span><span class="p">)</span>
+<span class="n">sigmaB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samplesB</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nB</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Although we don’t know the real means of the distributions, we know that, if they have the same means, then the mean of their differences should be zero. Remeber that when we subtract two independent random variables we obtain a third random variable whose mean is the subtraction of the original means, and whose variance is the <strong>sum</strong> of the original variances!</p>
+<p>Hence, what we are going to do is:</p>
+<ol class="arabic simple">
+<li><p>Assume there is no difference between the means of the samples,</p></li>
+<li><p>Estimate values for the mean and standard deviation of C=A-B,</p></li>
+<li><p>Calculate the probability of finding a difference as large as we have found assuming that the mean of C (<span class="math notranslate nohighlight">\(\mu_c\)</span>) is zero</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xbarC</span> <span class="o">=</span> <span class="n">xbarA</span><span class="o">-</span><span class="n">xbarB</span>
+<span class="n">sigmaC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="p">(</span><span class="n">sigmaA</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">sigmaB</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+<span class="c1">#print(sigmaA, sigmaB, sigmaC)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">xbarC</span><span class="o">/</span><span class="n">sigmaC</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">nA</span><span class="o">+</span><span class="n">nB</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-5.437148736873305 3.640659764778346e-05
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that we now have <code class="docutils literal notranslate"><span class="pre">nA+nB-2</span></code> degrees of freedom in the t distribution. This is a special case of the estimation of degrees of freedom using the <a class="reference external" href="https://en.wikipedia.org/wiki/Welch%E2%80%93Satterthwaite_equation">Welch-Satterthwaite equation</a> when <span class="math notranslate nohighlight">\(nA=nB\)</span>. This is a more complicated issue and I plan on devoting another blog post to discuss degrees of freedom.</p>
+<p>Like the one-sample T-Test, there is also a ready-made function for the two-sample T-Test:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">samplesA</span><span class="p">,</span> <span class="n">samplesB</span><span class="p">)</span> <span class="c1"># Did I just read a whole blog post only to copy this one line!??</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TtestResult(statistic=np.float64(-5.437148736873305), pvalue=np.float64(3.640659764778346e-05), df=np.float64(18.0))
+</pre></div>
+</div>
+</div>
+</div>
+<p>And, if you know the sample means and standard deviations, you can use <code class="docutils literal notranslate"><span class="pre">ttest_ind_from_stats</span></code>, which yields the same value:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind_from_stats</span><span class="p">(</span><span class="n">mean1</span><span class="o">=</span><span class="n">xbarA</span><span class="p">,</span> <span class="n">mean2</span><span class="o">=</span><span class="n">xbarB</span><span class="p">,</span> <span class="n">std1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samplesA</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">std2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samplesB</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">nobs1</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">samplesA</span><span class="p">),</span> <span class="n">nobs2</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">samplesB</span><span class="p">))</span> <span class="c1"># Did I just read a whole blog post only to copy this one line!??</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ttest_indResult(statistic=np.float64(-5.437148736873305), pvalue=np.float64(3.640659764778346e-05))
+</pre></div>
+</div>
+</div>
+</div>
+<p>We could also scale our student-t distribution instead of our mean, and get the same result:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xbarC</span> <span class="o">=</span> <span class="n">xbarA</span><span class="o">-</span><span class="n">xbarB</span>
+<span class="n">sigmaC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="p">(</span><span class="n">sigmaA</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">sigmaB</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># Use the t-statistic means shifting and scaling the samples</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">xbarC</span><span class="o">/</span><span class="n">sigmaC</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">nA</span><span class="o">+</span><span class="n">nB</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+<span class="c1"># Or, we could shift and scale the distribution:</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xbarA</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">xbarB</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigmaC</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">nA</span><span class="o">+</span><span class="n">nB</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-5.437148736873305 3.640659764778346e-05
+3.640659764778346e-05
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="next-steps">
+<h1>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h1>
+<p>We have investigated p-values in the context of t-tests. The p-values using t-tests rely on the assumption that the mean of our samples are random variables drawn from a normal distribution. This assumption is strong and frequently holds because it is a decorrence of the Central Limit Theorem. On top of the CLT, add a correction to the uncertainty regarding the sample variance, which leads to the Student-T distribution for the standardized T statistic calculated from the sample mean.</p>
+<p>This is a mathematically sound theory, and it delivers what is promised: we can estimate the probability of generating a sample mean at least as different from a reference value. A low probability indicates that the reference is inadequate.</p>
+<p>However, simply relying on p-values to make decisions can be tricky. As we have seen, increasing <span class="math notranslate nohighlight">\(n\)</span> deliberately can lead to finding low <span class="math notranslate nohighlight">\(p\)</span> values, regardless of the difference between the means we are evaluating. This is not a failure of the p-value or the t-tests: they are doing exactly what they are supposed to, which is calculating the <strong>probability of observing our data or a more disfavorable outcome under the assumption that the null hypothesis is true</strong>.</p>
+<p>Even if we have a very low p-value, we reject the null hypothesis and <em>so what</em>? Would a negligible difference between cupcake weights be meaningful in real life?</p>
+<p>Also, can we estimate “how negligible” is the observed difference between means?</p>
+<p>This is something to discuss in another post.</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to my blog!</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="abtest.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">What do t-tests and their p-values mean?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#central-limit-theorem-t-test-s-older-sibling">Central Limit Theorem: T-Test’s older sibling</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis">Using the Central Limt Theorem to reject a null hypothesis</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-standard-normal">Using a standard normal</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#null-hypothesis-and-the-p-value">Null Hypothesis and the p-value</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-a-pitfall-when-there-are-too-many-observations">P-value: a pitfall when there are too many observations</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-t-student-distribution">The T-student distribution</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-student-distribution">P-values using the T-Student distribution</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-one-sample-t-test">The one-sample t-test</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-statistic">P-Values using the T-Statistic</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">The Alternative Hypothesis (and refinements to the Null Hypothesis)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-sample-t-test">The two-sample t-test</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tiago
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
