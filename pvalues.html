@@ -37,7 +37,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
-    <link rel="stylesheet" type="text/css" href="_static/style.css?v=73d71afc" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css?v=2ea42c8e" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -66,7 +66,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'pvalues';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test" href="abtest.html" />
+    <link rel="next" title="P-Values for A/B conversion tests using the Binomial test" href="abtest.html" />
     <link rel="prev" title="What does “hypothesis testing” mean?" href="hypothesistesting.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,22 +174,7 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="hypothesistesting.html">What does “hypothesis testing” mean?</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">What do t-tests and their p-values mean?</a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-<li class="toctree-l1"><a class="reference internal" href="abtest.html">P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</a></li>
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="abtest.html">P-Values for A/B conversion tests using the Binomial test</a></li>
 </ul>
 
     </div>
@@ -382,21 +367,19 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">What do t-tests and their p-values mean?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#central-limit-theorem-t-test-s-older-sibling">Central Limit Theorem: T-Test’s older sibling</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis">Using the Central Limt Theorem to reject a null hypothesis</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-standard-normal">Using a standard normal</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#null-hypothesis-and-the-p-value">Null Hypothesis and the p-value</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-a-pitfall-when-there-are-too-many-observations">P-value: a pitfall when there are too many observations</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-t-student-distribution">The T-student distribution</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-student-distribution">P-values using the T-Student distribution</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-one-sample-t-test">The one-sample t-test</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-statistic">P-Values using the T-Statistic</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">The Alternative Hypothesis (and refinements to the Null Hypothesis)</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-sample-t-test">The two-sample t-test</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#central-limit-theorem-t-test-s-older-sibling">Central Limit Theorem: T-Test’s older sibling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis">Using the Central Limt Theorem to reject a null hypothesis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-standard-normal">Using a standard normal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null-hypothesis-and-the-p-value">Null Hypothesis and the p-value</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-a-pitfall-when-there-are-too-many-observations">P-value: a pitfall when there are too many observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-t-student-distribution">The T-student distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-student-distribution">P-values using the T-Student distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-one-sample-t-test">The one-sample t-test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-statistic">P-Values using the T-Statistic</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">The Alternative Hypothesis (and refinements to the Null Hypothesis)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-sample-t-test">The two-sample t-test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -427,9 +410,8 @@
 </div>
 </div>
 </div>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="central-limit-theorem-t-test-s-older-sibling">
-<h1>Central Limit Theorem: T-Test’s older sibling<a class="headerlink" href="#central-limit-theorem-t-test-s-older-sibling" title="Link to this heading">#</a></h1>
+<section id="central-limit-theorem-t-test-s-older-sibling">
+<h2>Central Limit Theorem: T-Test’s older sibling<a class="headerlink" href="#central-limit-theorem-t-test-s-older-sibling" title="Link to this heading">#</a></h2>
 <p>Our story here begin with the Central Limit Theorem (CLT). The scenario underlying the CLT is that we have samples of size <span class="math notranslate nohighlight">\(n\)</span> which are drawn from an unknown distribution, and we want to understand more about the distribution. The CLT specifically refers to the relationship between <span class="math notranslate nohighlight">\(\mu\)</span>, which is the population mean for the distribution, and <span class="math notranslate nohighlight">\(\bar{X}\)</span>, which is the sample mean (which we measure!).</p>
 <p>The CLT assumes that samples <span class="math notranslate nohighlight">\(X\)</span> were drawn from a distribution with mean <span class="math notranslate nohighlight">\(\mu\)</span> and variance <span class="math notranslate nohighlight">\(\sigma ^2\)</span> (if you prefer: standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span>). The original distribution that generated samples <span class="math notranslate nohighlight">\(X\)</span> does not have to be normal or of any other specific shape. If our sample has <span class="math notranslate nohighlight">\(n\)</span> elements, then we can calculate the sample mean <span class="math notranslate nohighlight">\(\bar{X}\)</span> as:</p>
 <div class="math notranslate nohighlight">
@@ -444,8 +426,8 @@
 <p>This equation means that samples with higher <span class="math notranslate nohighlight">\(n\)</span> are likely to have a sample mean closer to the population mean.</p>
 <p>But, how can we use this result?</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="using-the-central-limt-theorem-to-reject-a-null-hypothesis">
-<h1>Using the Central Limt Theorem to reject a null hypothesis<a class="headerlink" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis" title="Link to this heading">#</a></h1>
+<section id="using-the-central-limt-theorem-to-reject-a-null-hypothesis">
+<h2>Using the Central Limt Theorem to reject a null hypothesis<a class="headerlink" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis" title="Link to this heading">#</a></h2>
 <p>Let’s suppose that a bakery says their cupcakes weight, on average, 100g, with a standard deviation of 10g. This standard deviation accounts for the fact that cupcakes are made by hand. However, even handmade cupcakes have to follow food regulations rules, so we are hired to check if the cupcakes are following that specification. What do we do? We randomly select some cupcakes, creating a <em>sample</em>. Suppose we are running our test with <span class="math notranslate nohighlight">\(n=10\)</span> cupcakes.</p>
 <p>After some time in the laboratory, we find that our sample mean is 105g, which is within one standard deviation from the expected mean.</p>
 <p>Now we ask ourselves: what are the chances that, if the specifications are followed, we observe a sample mean that is at least as high as the one we observed?</p>
@@ -478,8 +460,8 @@
 <p>Either we screwed up the measurements, or the bakery is wrong about their cupcakes’ weight distribution.</p>
 <p>Because I am very skilled in weighting cupcakes, I will go with the latter: the weights likely do not have mean 100g and standard deviation 10g.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="using-a-standard-normal">
-<h1>Using a standard normal<a class="headerlink" href="#using-a-standard-normal" title="Link to this heading">#</a></h1>
+<section id="using-a-standard-normal">
+<h2>Using a standard normal<a class="headerlink" href="#using-a-standard-normal" title="Link to this heading">#</a></h2>
 <p>We don’t need to use a scale and translated version of the Normal distribution to calculate its values. Instead, we can scale and translate our measurements and then use a distribution <span class="math notranslate nohighlight">\(N(0,1)\)</span> as a model. For such, we will need to calculate the standardized variable <span class="math notranslate nohighlight">\(Z\)</span> as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -512,13 +494,13 @@ Z = \frac{ \bar{X}-\mu}{\sigma / \sqrt{N}}
 <p>In summary, the standardization leads to a closer dialogue with statistics theory, at the expense of losing the variable’s original meaning. The standardization equation builds a bridge between these two worlds, and for this reason it is important to understand it.</p>
 <p>In fact, Scipy uses the standardization in the “backend”, using the <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> parameters provided by the user (that is, it shifts and scales the variables and then calculate statistics using the standard distributions).</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="null-hypothesis-and-the-p-value">
-<h1>Null Hypothesis and the p-value<a class="headerlink" href="#null-hypothesis-and-the-p-value" title="Link to this heading">#</a></h1>
+<section id="null-hypothesis-and-the-p-value">
+<h2>Null Hypothesis and the p-value<a class="headerlink" href="#null-hypothesis-and-the-p-value" title="Link to this heading">#</a></h2>
 <p>What happened here is that we had an initial hypothesis (the weights follow that specific distribution) and we gathered data that allowed us to state: if that is true, then there is a very small probability of observing our data. Consequently, we should reject - or nullify - this initial hypothesis. This is why this initial hypothesis is called <em>null hypothesis</em>.</p>
 <p>Also, we have a probability of observing data at least as far from the initial hypothesis (or: at least as extreme) as the observed data. If this probability is very small, then we reject the null hypothesis. This is our <span class="math notranslate nohighlight">\(1 \times 10^-2\)</span> probability calculated above. Because we don’t want to say “the probability of observing data as extreme or more extreme than the data we actually observed” every time, we are going to call this a <em>p-value</em>.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="p-value-a-pitfall-when-there-are-too-many-observations">
-<h1>P-value: a pitfall when there are too many observations<a class="headerlink" href="#p-value-a-pitfall-when-there-are-too-many-observations" title="Link to this heading">#</a></h1>
+<section id="p-value-a-pitfall-when-there-are-too-many-observations">
+<h2>P-value: a pitfall when there are too many observations<a class="headerlink" href="#p-value-a-pitfall-when-there-are-too-many-observations" title="Link to this heading">#</a></h2>
 <p>Now, let’s take a look at what happens when we change the number of observations:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -576,8 +558,8 @@ Z = \frac{ \bar{X}-\mu}{\sigma / \sqrt{N}}
 <p>This is especially relevant when you are dealing with larger samples and big data, because samples can quickly reach this size. If the p-values are used naively, null hypotheses will be rejected and “outperforming the previous approach” will be claimed too often with a negligible effect. So, we might want to consider effect sizes as a further analysis. There is a whole theory on effect sizes, and I will probably get back to that in a future post, but if your field does not use any analysis of this sort then using the difference between the theoretical and the measured means (or: <span class="math notranslate nohighlight">\(|| \mu - \bar{X} ||\)</span>) might suffice.</p>
 <p>For now, we will focus on a different case: when the population variance is unknown.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-t-student-distribution">
-<h1>The T-student distribution<a class="headerlink" href="#the-t-student-distribution" title="Link to this heading">#</a></h1>
+<section id="the-t-student-distribution">
+<h2>The T-student distribution<a class="headerlink" href="#the-t-student-distribution" title="Link to this heading">#</a></h2>
 <p>The CLT, which is the base for all our deduction here, can only be used if we know the true population variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>. This is usually not the case, as it is hard to find some situation is which we don’t known the mean, but we know the variance of our population. If we don’t know <span class="math notranslate nohighlight">\(\sigma^2\)</span>, we can estimate the sample variance <span class="math notranslate nohighlight">\(S^2\)</span> and use it instead to standardize our input:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -603,8 +585,8 @@ T = \frac{ \bar{X}-\mu}{S / \sqrt{N}}
 </div>
 <p>As we can see, the T-student distribution has longer tails than the normal, which account for its uncertainty. Also, when we increase the number of degrees of freedom, the T-Student distribution slowly converges to the normal.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="p-values-using-the-t-student-distribution">
-<h1>P-values using the T-Student distribution<a class="headerlink" href="#p-values-using-the-t-student-distribution" title="Link to this heading">#</a></h1>
+<section id="p-values-using-the-t-student-distribution">
+<h2>P-values using the T-Student distribution<a class="headerlink" href="#p-values-using-the-t-student-distribution" title="Link to this heading">#</a></h2>
 <p>Henceforth, if we didn’t know <span class="math notranslate nohighlight">\(\sigma^2\)</span> beforehand, we would calculate our p-value as:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -630,8 +612,8 @@ T = \frac{ \bar{X}-\mu}{S / \sqrt{N}}
 </div>
 <p>Note that now we don’t use the “true” sigma in our calculations. Rather, even if we used it to generate samples, we used the sample standard deviation to proceed to our calculations.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-one-sample-t-test">
-<h1>The one-sample t-test<a class="headerlink" href="#the-one-sample-t-test" title="Link to this heading">#</a></h1>
+<section id="the-one-sample-t-test">
+<h2>The one-sample t-test<a class="headerlink" href="#the-one-sample-t-test" title="Link to this heading">#</a></h2>
 <p>What we just did is a one-sample t-test. We estimated our p-value using the cumulative distribution function of the t distribution, instead of the normal. This change was because the uncertainty in our sample variance estimator makes it necessary to use a t-student distribution.</p>
 <p>Of course, because the one-sample t-test is performed many, many times, it comes bundled as part of our <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code> package:</p>
 <div class="cell docutils container">
@@ -648,8 +630,8 @@ T = \frac{ \bar{X}-\mu}{S / \sqrt{N}}
 </div>
 <p>We can already see that the p-value matches our estimation above, but what do each of these other parameters mean?</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="p-values-using-the-t-statistic">
-<h1>P-Values using the T-Statistic<a class="headerlink" href="#p-values-using-the-t-statistic" title="Link to this heading">#</a></h1>
+<section id="p-values-using-the-t-statistic">
+<h2>P-Values using the T-Statistic<a class="headerlink" href="#p-values-using-the-t-statistic" title="Link to this heading">#</a></h2>
 <p>The Student-T distribution is mathematically as centered in zero, similarly to the standard normal distribution. Although the scipy implementation kindly allows us to shift and scale our inputs in the backend, using de <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> parameters, this could lead to the false impression that <span class="math notranslate nohighlight">\(\bar{X}\)</span> follows a T distribution. It does not!!! Rather, the T statistic (that is, the standardization of <span class="math notranslate nohighlight">\(\bar{X} using the sample variance \)</span>S^2$) is the one that follows the T distribution.</p>
 <p>We can avoid this confusion by standardizing our samples ourselves to obtain the same results as above:</p>
 <div class="cell docutils container">
@@ -673,8 +655,8 @@ T = \frac{ \bar{X}-\mu}{S / \sqrt{N}}
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">
-<h1>The Alternative Hypothesis (and refinements to the Null Hypothesis)<a class="headerlink" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis" title="Link to this heading">#</a></h1>
+<section id="the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">
+<h2>The Alternative Hypothesis (and refinements to the Null Hypothesis)<a class="headerlink" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis" title="Link to this heading">#</a></h2>
 <p>In our function call, we had the parameter: <code class="docutils literal notranslate"><span class="pre">alternative='greater'</span></code>. The alternative hypothesis is the negation, or the complement, of the null hypothesis. In our cupcake scenario, we simply assumed that we wanted to calculate the probability that our sample mean is at least as high as the one we got.</p>
 <p>However, it could be the case that we wanted the probability that the sample mean is at least as far from the population mean as we have. In this case, we would need to “reflect” <span class="math notranslate nohighlight">\(\bar{x}\)</span> around <span class="math notranslate nohighlight">\(\mu\)</span> and then calculate the area in both “tails”. This is called a two-tailed test, and, because of the symmetry in the t-distribution, it gives a value twice as large as the one-tailed test:</p>
 <div class="cell docutils container">
@@ -695,8 +677,8 @@ TtestResult(statistic=1.4530992590921659, pvalue=0.16251349975133292, df=19)
 <p>All right.</p>
 <p>So far, we have a test for when we know the mean and variance of the population. We also have the t-test for when we know the mean, but not the variance of the population. But, in real life, we often simply have two groups - say, group A and group B - being measured, and we have no hypothesys on their means or variances. This gives rise to…</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-two-sample-t-test">
-<h1>The two-sample t-test<a class="headerlink" href="#the-two-sample-t-test" title="Link to this heading">#</a></h1>
+<section id="the-two-sample-t-test">
+<h2>The two-sample t-test<a class="headerlink" href="#the-two-sample-t-test" title="Link to this heading">#</a></h2>
 <p>Although we could leave the cupcakes behind, this would make me so sad. In this example, we are going to use two bakeries (A and B), and all we have are some cupcake samples from each one of them. Can we safely say that their cupcakes’ weights, on average, are not the same?</p>
 <p>For this, let’s start by generating some samples for each bakery, and calculate sample statistics for each one:</p>
 <div class="cell docutils container">
@@ -734,7 +716,7 @@ TtestResult(statistic=1.4530992590921659, pvalue=0.16251349975133292, df=19)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1.283768771799056 0.21550328032019472
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.8313671723150944 0.01106630170973096
 </pre></div>
 </div>
 </div>
@@ -748,7 +730,7 @@ TtestResult(statistic=1.4530992590921659, pvalue=0.16251349975133292, df=19)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TtestResult(statistic=-1.2837687717990556, pvalue=0.21550328032019483, df=18.0)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TtestResult(statistic=-2.831367172315094, pvalue=0.01106630170973096, df=18.0)
 </pre></div>
 </div>
 </div>
@@ -761,7 +743,7 @@ TtestResult(statistic=1.4530992590921659, pvalue=0.16251349975133292, df=19)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ttest_indResult(statistic=-1.2837687717990556, pvalue=0.21550328032019483)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ttest_indResult(statistic=-2.831367172315094, pvalue=0.01106630170973096)
 </pre></div>
 </div>
 </div>
@@ -784,21 +766,22 @@ TtestResult(statistic=1.4530992590921659, pvalue=0.16251349975133292, df=19)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1.283768771799056 0.21550328032019472
-0.21550328032019472
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.8313671723150944 0.01106630170973096
+0.01106630170973096
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="next-steps">
-<h1>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h1>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
 <p>We have investigated p-values in the context of t-tests. The p-values using t-tests rely on the assumption that the mean of our samples are random variables drawn from a normal distribution. This assumption is strong and frequently holds because it is a decorrence of the Central Limit Theorem. On top of the CLT, add a correction to the uncertainty regarding the sample variance, which leads to the Student-T distribution for the standardized T statistic calculated from the sample mean.</p>
 <p>This is a mathematically sound theory, and it delivers what is promised: we can estimate the probability of generating a sample mean at least as different from a reference value. A low probability indicates that the reference is inadequate.</p>
 <p>However, simply relying on p-values to make decisions can be tricky. As we have seen, increasing <span class="math notranslate nohighlight">\(n\)</span> deliberately can lead to finding low <span class="math notranslate nohighlight">\(p\)</span> values, regardless of the difference between the means we are evaluating. This is not a failure of the p-value or the t-tests: they are doing exactly what they are supposed to, which is calculating the <strong>probability of observing our data or a more disfavorable outcome under the assumption that the null hypothesis is true</strong>.</p>
 <p>Even if we have a very low p-value, we reject the null hypothesis and <em>so what</em>? Would a negligible difference between cupcake weights be meaningful in real life?</p>
 <p>Also, can we estimate “how negligible” is the observed difference between means?</p>
 <p>This is something to discuss in another post.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -845,7 +828,7 @@ TtestResult(statistic=1.4530992590921659, pvalue=0.16251349975133292, df=19)
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</p>
+        <p class="prev-next-title">P-Values for A/B conversion tests using the Binomial test</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -866,21 +849,19 @@ TtestResult(statistic=1.4530992590921659, pvalue=0.16251349975133292, df=19)
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">What do t-tests and their p-values mean?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#central-limit-theorem-t-test-s-older-sibling">Central Limit Theorem: T-Test’s older sibling</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis">Using the Central Limt Theorem to reject a null hypothesis</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-standard-normal">Using a standard normal</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#null-hypothesis-and-the-p-value">Null Hypothesis and the p-value</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-a-pitfall-when-there-are-too-many-observations">P-value: a pitfall when there are too many observations</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-t-student-distribution">The T-student distribution</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-student-distribution">P-values using the T-Student distribution</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-one-sample-t-test">The one-sample t-test</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-statistic">P-Values using the T-Statistic</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">The Alternative Hypothesis (and refinements to the Null Hypothesis)</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-sample-t-test">The two-sample t-test</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#central-limit-theorem-t-test-s-older-sibling">Central Limit Theorem: T-Test’s older sibling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-central-limt-theorem-to-reject-a-null-hypothesis">Using the Central Limt Theorem to reject a null hypothesis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-standard-normal">Using a standard normal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null-hypothesis-and-the-p-value">Null Hypothesis and the p-value</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-a-pitfall-when-there-are-too-many-observations">P-value: a pitfall when there are too many observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-t-student-distribution">The T-student distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-student-distribution">P-values using the T-Student distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-one-sample-t-test">The one-sample t-test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-values-using-the-t-statistic">P-Values using the T-Statistic</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-alternative-hypothesis-and-refinements-to-the-null-hypothesis">The Alternative Hypothesis (and refinements to the Null Hypothesis)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-sample-t-test">The two-sample t-test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>
