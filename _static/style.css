@@ -18,6 +18,9 @@ a.reference.internal {
 
 a.reference.internal:hover {
     background-color: #42a5f5; /* Darker shade on hover */
+    color: white; /* Button text color */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
     transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
