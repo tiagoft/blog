@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test &#8212; Tiago&#39;s Blog</title>
+    <title>P-Values for A/B conversion tests using the Binomial test &#8212; Tiago&#39;s Blog</title>
   
   
   
@@ -37,7 +37,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
-    <link rel="stylesheet" type="text/css" href="_static/style.css?v=73d71afc" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css?v=2ea42c8e" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -173,22 +173,7 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="hypothesistesting.html">What does “hypothesis testing” mean?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pvalues.html">What do t-tests and their p-values mean?</a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</a></li>
-
-
-
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">P-Values for A/B conversion tests using the Binomial test</a></li>
 </ul>
 
     </div>
@@ -371,7 +356,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</h1>
+    <h1>P-Values for A/B conversion tests using the Binomial test</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -381,18 +366,14 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#users-are-coins-in-the-bernoulli-sense">Users are coins - in the Bernoulli sense</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-my-website-has-n-visitors-and-a-p-conversion-rate-how-many-conversions-should-i-expect-with-99-certainty">If my website has <span class="math notranslate nohighlight">\(n\)</span> visitors and a <span class="math notranslate nohighlight">\(p\)</span> conversion rate, how many conversions should I expect (with 99% certainty)?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-a-new-website-version">Testing a new website version</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-a-b-test">The A/B test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-n">Increasing N</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-application-comparing-classifiers">Another application: comparing classifiers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-n">Increasing N</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#another-application-comparing-classifiers">Another application: comparing classifiers</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -403,8 +384,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="p-values-for-a-b-conversion-tests-and-machine-learning-classifier-comparisons-using-the-binomial-test">
-<h1>P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test<a class="headerlink" href="#p-values-for-a-b-conversion-tests-and-machine-learning-classifier-comparisons-using-the-binomial-test" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="p-values-for-a-b-conversion-tests-using-the-binomial-test">
+<h1>P-Values for A/B conversion tests using the Binomial test<a class="headerlink" href="#p-values-for-a-b-conversion-tests-using-the-binomial-test" title="Link to this heading">#</a></h1>
 <p>Website effectiveness measurement commonly uses user-centric measures such as a <em>conversion rate</em> (fraction of visitors that become effective clients) or a <em>click rate</em> (fraction of users that click or interact with something in the website). These measures must be calculated from real interactions, and each one of them is binary (representing whether the event happened).</p>
 <ul class="simple">
 <li><p>How to manipulate and predict website interactions using statistical models and Python’s scipy module,</p></li>
@@ -561,9 +542,8 @@ P(c &gt; c_b | p_a=p_b).
 </div>
 </div>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="increasing-n">
-<h1>Increasing N<a class="headerlink" href="#increasing-n" title="Link to this heading">#</a></h1>
+<section id="increasing-n">
+<h2>Increasing N<a class="headerlink" href="#increasing-n" title="Link to this heading">#</a></h2>
 <p>Ok, now lets suppose we increase the number of participants in our experimental test. What happens with our p-value? Let’s test!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -592,8 +572,8 @@ P(c &gt; c_b | p_a=p_b).
 <p>So we find a descending line with a ripple. This ripple is because the binomial distribution is discrete. As we can see, the ripple’s absolute magnitude decreases when <span class="math notranslate nohighlight">\(n_b\)</span> increases, that is, the ripple gets smaller as the binomial approaches the normal distribution.</p>
 <p>Another important characteristic here is that the p-value decreases when <span class="math notranslate nohighlight">\(n_b\)</span> increases. This means that, regardless of the difference between the conversinon probabilities of the two website versions, we would be able to see a statistically significant difference if the number of participants in the test was large enough.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="another-application-comparing-classifiers">
-<h1>Another application: comparing classifiers<a class="headerlink" href="#another-application-comparing-classifiers" title="Link to this heading">#</a></h1>
+<section id="another-application-comparing-classifiers">
+<h2>Another application: comparing classifiers<a class="headerlink" href="#another-application-comparing-classifiers" title="Link to this heading">#</a></h2>
 <p>A problem that is probably going to show up in your life if you study or work with machine learning is testing a new classifier. You are probably going to estimate a class for each element in your test set, then decide if you were right or wrong. Note that attempting a classification is equivalent to flipping a biased coin, and being correct about the classification is equivalent to obtaining heads.</p>
 <p>Hence, we could use the binomial test to detect whether the observed difference between our classifiers is statistically significant:</p>
 <div class="cell docutils container">
@@ -617,10 +597,11 @@ p-value (with scipy): 0.09256987367775626
 </div>
 <p>Importantly, it is still important to consider that, if the dataset size is too large, even a small change in accuracy might be considered significant, even to a very low confidence level. Hence, it is important to check if the effect size (the difference between <span class="math notranslate nohighlight">\(n/c\)</span> and <span class="math notranslate nohighlight">\(p\)</span>) is <em>relevant</em> to the application.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="next-steps">
-<h1>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h1>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
 <p>So far, I have written about two different methods to calculate p-values, and they fit different contexts. However, both of them are very sensitive to the number <span class="math notranslate nohighlight">\(n\)</span> of elements in the sample. This is because they both refer to null hypotheses related to <em>parameters</em> of random variables, and increasing <span class="math notranslate nohighlight">\(n\)</span> decreases the uncertainty about these parameters. Thus, p-values are weak in large datasets, but are entirely necessary in smaller ones.</p>
 <p>There are some new proposals for p-values, which I aim to investigate in the future. They claim to solve (or at least attenuate) the big data problem. Let’s see how that goes!</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -679,18 +660,14 @@ p-value (with scipy): 0.09256987367775626
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">P-Values for A/B conversion tests and machine learning classifier comparisons using the Binomial test</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#users-are-coins-in-the-bernoulli-sense">Users are coins - in the Bernoulli sense</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-my-website-has-n-visitors-and-a-p-conversion-rate-how-many-conversions-should-i-expect-with-99-certainty">If my website has <span class="math notranslate nohighlight">\(n\)</span> visitors and a <span class="math notranslate nohighlight">\(p\)</span> conversion rate, how many conversions should I expect (with 99% certainty)?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-a-new-website-version">Testing a new website version</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-a-b-test">The A/B test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-n">Increasing N</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-application-comparing-classifiers">Another application: comparing classifiers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-n">Increasing N</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#another-application-comparing-classifiers">Another application: comparing classifiers</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
-</ul>
-
   </nav></div>
 
 </div></div>
