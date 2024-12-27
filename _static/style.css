@@ -3,23 +3,11 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* Style links with a highlight effect on hover */
-a {
-    color: #1e88e5; /* Default link color */
-    text-decoration: none; /* Remove underline */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
-}
-
-a:hover {
-    background-color: #bbdefb; /* Highlight background on hover */
-    color: #0d47a1; /* Change text color on hover */
-}
-
 /* Style specific links as buttons */
 a.reference.internal {
     display: inline-block;
     padding: 10px 20px; /* Add padding to look like a button */
-    background-color: #1e88e5; /* Button background color */
+    background-color: #64b5f6; /* Button background color */
     color: white; /* Button text color */
     border-radius: 5px; /* Rounded corners */
     text-align: center; /* Center text */
@@ -29,6 +17,19 @@ a.reference.internal {
 }
 
 a.reference.internal:hover {
-    background-color: #1565c0; /* Darker shade on hover */
+    background-color: #42a5f5; /* Darker shade on hover */
     transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Responsive design for mobile */
+@media (max-width: 600px) {
+    a.reference.internal {
+        display: block; /* Stack buttons vertically on small screens */
+        width: 100%; /* Full width for buttons */
+        box-sizing: border-box; /* Include padding and border in width */
+    }
+
+    body {
+        padding: 10px; /* Add padding to avoid edge overlap */
+    }
 }
