@@ -1,1 +1,37 @@
-site_name: My Docs
+site_name: Tiago Tavares Blog
+
+site_dir: build
+
+locale: en
+
+theme:
+  name: material
+  palette:
+    scheme: slate  # dark mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - content.mathjax
+
+nav:
+  - Home: index.md
+  - Math tutorials:
+    - A/B testing: math/abtest.ipynb
+    - Hypothesis testing: math/hypothesistesting.ipynb
+    - T-Tests and P-Values: math/pvalues.ipynb
+
+plugins:
+  - mkdocs-jupyter:
+      execute: false           # Run notebook before rendering
+      allow_errors: false     # Fail if execution errors occur
+      show_input: true        # Show code cells
+      kernel_name: python3    # Specify kernel
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML
