@@ -1,17 +1,5 @@
-# Welcome to MkDocs
+# Welcome to my blog!
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Hi, this is Tiago here! Welcome to my blog. This is where I share some thoughts and tutorials on my main driving forces: math and art. I hope you find this useful - and that I find time to write more and more!
 
-## Commands
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+If you feel like talking about anything, please contact me at tiagoft [at] gmail [dot] com.
