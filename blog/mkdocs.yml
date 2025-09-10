@@ -16,6 +16,8 @@ theme:
 
 nav:
   - Home: index.md
+  - Generative Art:
+    - My Funny Recursive Fractals: genart/fractals.ipynb
   - Math tutorials:
     - A/B testing: math/abtest.ipynb
     - Hypothesis testing: math/hypothesistesting.ipynb
